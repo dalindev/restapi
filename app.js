@@ -19,17 +19,18 @@ const flash    		= require('connect-flash');
 
 /* ------------------------------------------- */
 if(process.env.NODE_ENV == undefined) {
+	process.env.NODE_ENV = 'development';
 	console.log(`
 ================================================
 |
-| 	Environment required or just use:
+| 	Environment missing!
+|
+|	running default : development
 |
 | 	NODE_ENV=development node app.js
 |
 ================================================
 `	);
-	// stop process
-	process.exit(-1);
 }
 
 // log request to console
@@ -55,6 +56,9 @@ app.use(flash()) // flash messages stored in session
 app.set('view engine', 'ejs');
 // view
 app.set('views', './app/views')
+
+app.use(express.static('public'))
+
 
 app.get('/', function (req, res) {
   // if user is auth in the session, carry on

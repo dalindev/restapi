@@ -8,8 +8,9 @@
   </head>
 
   <body>
+    <%- include('./body_html/top-navbar.ejs', {user: user}); %>
     <h1>Hello, world!</h1>
 
-    <%- include('./body/main-js.ejs') %>
+    <%- include('./body_js/main-js.ejs') %>
   </body>
 </html>
