@@ -71,6 +71,8 @@ const models = require("./app/models");
  *  routes
  */
 const authRoute = require('./app/routes/auth.js')(app,passport);
+//load passport strategies
+const userRoute = require('./app/config/passport/passport.js')(passport,models.user);
 
 /**
  *  database
