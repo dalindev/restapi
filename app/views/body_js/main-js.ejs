@@ -5,4 +5,49 @@
 
 <!-- Optional JavaScript -->
 <script type="text/javascript">
+
+class HelperToolsClass {
+    constructor() {
+        this.version = '0.0.1';
+    }
+
+    static btnDebounce(_ele, time_ms=1000) {
+        let _this = $(_ele);
+        _this.attr("disabled", true);
+        setTimeout(function() { _this.attr("disabled", false); }, time_ms);
+    }
+
+    static debounce(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    };
+
+    static debounceFirst(func, delay) {
+      var timer = 0;
+      return function debouncedFn() {
+        if (Date.now() - timer > delay) {
+          func();
+        }
+        timer = Date.now();
+      };
+    }
+
+    /**
+     *  delay a call for JavaScript
+     */
+    static delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    };
+};
+
 </script>

@@ -1,12 +1,21 @@
-module.exports = function(sequelize, Sequelize) {
+module.exports = function(sequelize, DataTypes) {
 
-  var Messages = sequelize.define('messages', {
-    id: { autoIncrement: true, primaryKey: true, type: Sequelize.INTEGER},
-    user_id: { type: Sequelize.INTEGER, allowNull: false},
-    content: { type:Sequelize.TEXT},
-    palindrome: { type: Sequelize.BOOLEAN, allowNull: true},
-    status: {type: Sequelize.INTEGER(2), defaultValue:1}
+  const Messages = sequelize.define('Messages', {
+    id: { autoIncrement: true, primaryKey: true, type: DataTypes.INTEGER},
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    content: { type:DataTypes.TEXT},
+    palindrome: { type: DataTypes.BOOLEAN, allowNull: true},
+    status: {type: DataTypes.INTEGER(2), defaultValue:1}
   });
+
+  Messages.associate = function (models) {
+    models.Messages.belongsTo(models.User, {
+      foreignKey: 'user_id'
+    });
+  };
 
   return Messages;
 }

@@ -12,11 +12,11 @@
     <div class="form-inline pull-right">
       <!-- if user logged in  -->
       <% if (user) { %>
-        <span class="form-inline" style="color: white;">Welcome!&nbsp;<a href="/" style="color: aqua;"><%= user.firstname %> <%= user.lastname %></a></span>
-        <a href="/logout" class="nav-link nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i> Logout</a>
+      <span class="form-inline" style="color: white;">Welcome!&nbsp;<a href="/" style="color: aqua;"><%= user.first_name %> <%= user.last_name %></a></span>
+      <a href="/logout" class="nav-link nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i> Logout</a>
       <% } else { %>
-        <a href="/login" class="nav-link nav-login-signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Login</a>
-        <a href="/signup" class="nav-link btn btn-outline-success nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Sign Up</a>
+      <a href="/login" class="nav-link nav-login-signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Login</a>
+      <a href="/signup" class="nav-link btn btn-outline-success nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Sign Up</a>
       <% } %>
     </div>
   </div>

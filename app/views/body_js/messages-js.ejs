@@ -1,3 +1,38 @@
 <!-- Messages JavaScript -->
 <script type="text/javascript">
+$(function() {
+  const debounceFst = Object.assign(HelperToolsClass.debounceFirst);
+
+  async function getAllMessages() {
+    const json = await fetch(
+      '/api/v1/listmessages',
+      {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "same-origin", // no-cors, cors, *same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, same-origin, *omit
+      }
+    ).then(
+      response => response.json()
+    );
+
+    let msgsBox = document.querySelector('#msgs_box');
+    msgsBox.innerHTML = '';
+    json.forEach(function(msg) {
+      console.log(msg);
+      msgsBox.innerHTML += `
+        <div>
+          <span>User 1234: </span>
+          <span class="alert alert-secondary" role="alert">
+            This is a secondary alert—check it out!
+          </span>
+        <div>`;
+    });
+
+  }
+
+  var getAllMsgs = debounceFst(getAllMessages, 1000);
+
+  document.querySelector('#get_all_messages').addEventListener('click', getAllMsgs);
+});
 </script>

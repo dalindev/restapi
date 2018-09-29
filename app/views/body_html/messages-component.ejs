@@ -1,6 +1,6 @@
 <div class="container user-msgs-container">
   <div class="row">
-    <div class="msgs-box col">
+    <div class="msgs-box w-100" id="msgs_box">
       <div class="alert alert-secondary" role="alert">
         This is a secondary alert—check it out!
       </div>
@@ -22,16 +22,25 @@
       <div class="alert alert-success" role="alert">
         This is a success alert—check it out! 😌😌😌
       </div>
-      <div class="alert alert-secondary" role="alert">
-        This is a secondary alert—check it out!
-      </div>
+      <div>
+        <span>User 1234: </span>
+        <span class="alert alert-secondary" role="alert">
+          This is a secondary alert—check it out!
+        </span>
+      <div>
     </div>
   </div>
   <hr>
   <div class="row">
     <div class="col">
-      <button type="button" class="btn btn-outline-primary">Get All Messages</button>
-      <button type="button" class="btn btn-primary pull-right">Get All Messages</button>
+      <button type="button" class="btn btn-outline-primary" id="get_all_messages">Get All Messages</button>
+      <% if (user) { %>
+      <button type="button" class="btn btn-primary pull-right">Send Msg</button>
+      <% } else { %>
+      <span class="pull-right">
+        <a href="/login">Please login to post a message</a>
+      </span>
+      <% } %>
     </div>
   </div>
   <hr>
