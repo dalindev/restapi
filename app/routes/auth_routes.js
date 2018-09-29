@@ -16,15 +16,7 @@ module.exports = function(app,passport){
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
-  }),
-  function (req, res) {
-    if (req.body.remember) {
-      req.session.cookie.maxAge = 1000 * 60 * 3
-    } else {
-      req.session.cookie.expires = false
-    }
-    res.redirect('/')
-  });
+  }));
 
   // l--------- ogout ---------
   app.get('/logout',authController.logout);

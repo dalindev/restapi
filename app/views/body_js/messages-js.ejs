@@ -3,27 +3,39 @@
 $(function() {
   const debounceFst = Object.assign(HelperToolsClass.debounceFirst);
 
-  async function getAllMessages() {
-    const msgsJson = await fetch(
-      '/api/v1/listmessages',
+  // ------------------ Events ------------------
+  document
+    .querySelector('#get_all_messages')
+    .addEventListener('click', debounceFst(getMessages, 1000));
+
+  // ------------------ Methods ------------------
+  async function getMessages() {
+    const res = await fetch(
+      '/api/v1/messages',
       {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         mode: "same-origin", // no-cors, cors, *same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, same-origin, *omit
       }
-    ).then(
-      response => response.json()
-    );
+    ).then(response => response.json());
 
+    if(res.meta.result) {
+      displayMessages(res.data);
+    } else {
+      alert(`Error ${res.code} : ${res.msg}`);
+    }
+  }
+
+  function displayMessages(dataObj) {
     let msgsBox = document.querySelector('#msgs_box');
     msgsBox.innerHTML = '';
-    msgsJson.forEach(function(msg) {
-      console.log(msg);
+    dataObj.forEach(function(msg) {
       msgsBox.innerHTML += `
         <div class="row">
           <div class="col-sm-3 col-lg-2 text-right">
-            <span>${msg.User.first_name} ${msg.User.last_name}: </span>
+            <span>${msg.User.first_name} ${msg.User.last_name}</span><br>
+            <span>MsgID: ${msg.id}</span>
           </div>
           <div class="col-sm-9 col-lg-10">
           <div class="alert alert-secondary" role="alert">${msg.content}</div>
@@ -32,9 +44,18 @@ $(function() {
     });
   }
 
-  var getAllMsgs = debounceFst(getAllMessages, 1000);
-  document
-    .querySelector('#get_all_messages')
-    .addEventListener('click', getAllMsgs);
+  async function postOneMessage() {
+    const res = await fetch(
+      '/api/v1/message',
+      {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "same-origin", // no-cors, cors, *same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, same-origin, *omit
+      }
+    ).then(response => response.json());
+
+    console.log('post msg res ->', res);
+  }
 });
 </script>

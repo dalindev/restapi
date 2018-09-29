@@ -33,10 +33,19 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col">
+    <div class="col-md-3">
       <button type="button" class="btn btn-outline-primary" id="get_all_messages">Get All Messages</button>
+    </div>
+    <div class="col-md-9">
       <% if (user) { %>
-      <button type="button" class="btn btn-primary pull-right">Send Msg</button>
+      <div class="row">
+        <div class="col-md-10">
+          <textarea class="form-control" placeholder="Your messages here..." rows="2" id="comment"></textarea>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-success pull-right">Post Now</button>
+        </div>
+      </div>
       <% } else { %>
       <span class="pull-right">
         <a href="/login">Please login to post a message</a>
