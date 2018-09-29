@@ -70,6 +70,7 @@ const models = require("./app/models");
 /**
  *  routes
  */
+const authRoute = require('./app/routes/auth.js')(app,passport);
 
 /**
  *  database
