@@ -4,9 +4,8 @@ const config = require('./config/conf.json')
 const express 		= require('express');
 const session  		= require('express-session');
 const cookieParser 	= require('cookie-parser');
+const cookie     	= require('cookie');
 const bodyParser 	= require('body-parser');
-
-// log request to console
 const morgan 		= require('morgan');
 
 const app 			= express();
@@ -18,16 +17,65 @@ const passport 		= require('passport');
 // display msg in session
 const flash    		= require('connect-flash');
 
+/* ------------------------------------------- */
+if(process.env.NODE_ENV == undefined) {
+	console.log(`
+================================================
+|
+| 	Environment required or just use:
+|
+| 	NODE_ENV=development node app.js
+|
+================================================
+`	);
+	// stop process
+	process.exit(-1);
+}
+
+// log request to console
 app.use(morgan('dev'));
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// to support JSON-encoded bodies (fir auth)
+app.use(cookieParser());
+
+ // For Passport
+app.use(session({
+  secret: config[process.env.NODE_ENV].session_secret,
+  resave: true,
+  saveUninitialized:true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()) // flash messages stored in session
 
 // ejs templating
 app.set('view engine', 'ejs');
+// view
+app.set('views', './app/views')
 
-// start app =======
-app.listen(port);
-console.log('restapp running on port ' + port);
+app.get('/', function (req, res) {
+  // if user is auth in the session, carry on
+  if (req.isAuthenticated()) {
+    // load the index.ejs
+    res.render('index.ejs', {
+    	user: req.user
+    })
+  } else {
+    res.render('index.ejs', {
+      user: false
+    })
+  }
+});
+
+/* Start app --------------------------------- */
+var server = app.listen(port, '127.0.0.1', function () {
+	let host = server.address().address
+	let port = server.address().port
+
+	console.log(`${process.env.NODE_ENV} running on http://${host}:${port}`
+	);
+});
+
