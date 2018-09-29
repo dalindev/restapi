@@ -4,7 +4,7 @@ $(function() {
   const debounceFst = Object.assign(HelperToolsClass.debounceFirst);
 
   async function getAllMessages() {
-    const json = await fetch(
+    const msgsJson = await fetch(
       '/api/v1/listmessages',
       {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -18,21 +18,23 @@ $(function() {
 
     let msgsBox = document.querySelector('#msgs_box');
     msgsBox.innerHTML = '';
-    json.forEach(function(msg) {
+    msgsJson.forEach(function(msg) {
       console.log(msg);
       msgsBox.innerHTML += `
-        <div>
-          <span>User 1234: </span>
-          <span class="alert alert-secondary" role="alert">
-            This is a secondary alert—check it out!
-          </span>
-        <div>`;
+        <div class="row">
+          <div class="col-sm-3 col-lg-2 text-right">
+            <span>${msg.User.first_name} ${msg.User.last_name}: </span>
+          </div>
+          <div class="col-sm-9 col-lg-10">
+          <div class="alert alert-secondary" role="alert">${msg.content}</div>
+          </div>
+        </div>`;
     });
-
   }
 
   var getAllMsgs = debounceFst(getAllMessages, 1000);
-
-  document.querySelector('#get_all_messages').addEventListener('click', getAllMsgs);
+  document
+    .querySelector('#get_all_messages')
+    .addEventListener('click', getAllMsgs);
 });
 </script>
