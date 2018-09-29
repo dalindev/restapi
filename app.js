@@ -56,6 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()) // flash messages stored in session
 
+
 /**
  *  view
  */
@@ -70,10 +71,12 @@ const models = require("./app/models");
 /**
  *  routes
  */
-const authRoute = require('./app/routes/auth.js')(app,passport);
-//load passport strategies
-const userRoute = require('./app/config/passport/passport.js')(passport,models.user);
+ //load passport strategies
+const passportRoute = require('./app/config/passport/passport.js')(passport,models.user);
 
+const authRoute = require('./app/routes/auth_routes.js')(app,passport);
+
+const apiV1 = require('./app/routes/v1_0/messages_routes.js')(app);
 /**
  *  database
  */
