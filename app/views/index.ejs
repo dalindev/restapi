@@ -9,9 +9,9 @@
 
   <body>
     <%- include('./body_html/top-navbar.ejs', {user: user}); %>
-
-    <h1>Hello, world!</h1>
+    <%- include('./body_html/messages-component.ejs', {user: user}); %>
 
     <%- include('./body_js/main-js.ejs') %>
+    <%- include('./body_js/messages-js.ejs') %>
   </body>
 </html>
