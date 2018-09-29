@@ -50,6 +50,8 @@ exports.getMessages = function(req,res){
 exports.postMessage = function(req,res){
   const Messages = models.Messages;
 
+  console.log(req);
+
   res.status(200).send('looks ok to me...');
 }
 

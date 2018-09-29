@@ -32,18 +32,18 @@
     </div>
   </div>
   <hr>
-  <div class="row">
+  <div class="row" id="input_box">
     <div class="col-md-3">
-      <button type="button" class="btn btn-outline-primary" id="get_all_messages">Get All Messages</button>
+      <button type="button" class="btn btn-outline-primary" data-action="getMessages">Get Messages</button>
     </div>
     <div class="col-md-9">
       <% if (user) { %>
       <div class="row">
         <div class="col-md-10">
-          <textarea class="form-control" placeholder="Your messages here..." rows="2" id="comment"></textarea>
+          <textarea class="form-control" placeholder="Your messages here..." rows="2" id="message_input"></textarea>
         </div>
         <div class="col-md-2">
-          <button type="button" class="btn btn-success pull-right">Post Now</button>
+          <button type="button" class="btn btn-success pull-right" id="post_now">Post Now</button>
         </div>
       </div>
       <% } else { %>

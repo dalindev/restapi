@@ -1,15 +1,33 @@
 <!-- Messages JavaScript -->
 <script type="text/javascript">
 $(function() {
-  const debounceFst = Object.assign(HelperToolsClass.debounceFirst);
+  const debounceF = Object.assign(HelperToolsClass.debounceFirst);
+  const btnDebounce = Object.assign(HelperToolsClass.btnDebounce);
 
-  // ------------------ Events ------------------
-  document
-    .querySelector('#get_all_messages')
-    .addEventListener('click', debounceFst(getMessages, 1000));
+  // -------------- Events delegation -------------
+  class InputBox {
+    constructor(elem) {
+      this._elem = elem;
+      elem.onclick = this.onClick.bind(this); // (*)
+    }
+    getMessages() {
+      getMessagesAjax();
+    }
+    postMessage() {
+      postOneMessageAjax();
+    }
+    onClick(event) {
+      let action = event.target.dataset.action;
+      if (action) {
+        btnDebounce(event.target);
+        this[action]();
+      }
+    };
+  }
+  new InputBox(input_box);
 
-  // ------------------ Methods ------------------
-  async function getMessages() {
+  // ------------------ Functions -----------------
+  async function getMessagesAjax() {
     const res = await fetch(
       '/api/v1/messages',
       {
@@ -44,18 +62,29 @@ $(function() {
     });
   }
 
-  async function postOneMessage() {
-    const res = await fetch(
-      '/api/v1/message',
-      {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "same-origin", // no-cors, cors, *same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, same-origin, *omit
-      }
-    ).then(response => response.json());
+  async function postOneMessageAjax() {
+    let msginput = document.querySelector('#message_input') &&
+      document.querySelector('#message_input').value;
 
-    console.log('post msg res ->', res);
+    if(!msginput) {
+      alert('Empty message or message not valid');
+    } else {
+      const res = await fetch(
+        '/api/v1/message',
+        {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: msginput
+          })
+        }
+      ).then(response => response.json());
+
+      console.log('post msg res ->', res);
+    }
   }
 });
 </script>
