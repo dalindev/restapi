@@ -106,13 +106,15 @@ $(function() {
       res.data = res.data.length === undefined ? [res.data] : res.data;
 
       displayMessages(res.data);
+      // reset
+      document.querySelector('#getMessageById').value = '';
     } else if (res.meta.total == 0) {
       alert(`Can't find that message...`);
     } else {
       alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
     }
   };
-  // run once for page load
+  // run once for page load (init)
   getMessagesAjax();
 
 
@@ -143,7 +145,9 @@ $(function() {
       ).then(response => response.json());
       console.log(res);
       if (res && res.meta && res.meta.code && res.meta.code == 201) {
+        // reset
         document.querySelector('#message_input').value = '';
+        // reload msgs
         getMessagesAjax();
       } else {
         alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
@@ -168,10 +172,11 @@ $(function() {
       ).then(response => response ? response.json() : {})
       .catch();
 
-      console.log(res);
-
       if (res && res.meta && res.meta.code && res.meta.code == 204) {
         alert(`OK! ${res.meta.msg}`);
+        // reset
+        document.querySelector('#delMessageById').value = '';
+        // reload msgs
         getMessagesAjax();
       } else {
         alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
