@@ -1,4 +1,6 @@
 var listMessagesCtrl = require('../../controllers/v1_0/messages_controller.js');
+const helper = require('../../tools/helper_method');
+
 
 module.exports = function(app){
 
@@ -21,13 +23,7 @@ module.exports = function(app){
     if (req.isAuthenticated()){
       return next();
     } else {
-      res.status(401).send({
-        "meta": {
-          "result": false,
-          "code": 401,
-          "msg": 'Unauthorized: login is required'
-        }
-      })
+      helper.okResp(res, 401, 'Unauthorized: login is required');
     }
   }
 }

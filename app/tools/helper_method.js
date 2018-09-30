@@ -17,9 +17,9 @@ exports.okResp = function(
     total = data instanceof Array ? data.length :
       (data instanceof Object && Object.keys(data).length > 0 ? 1 : 0);
   }
-  return res.status(statusCode).send({
+  return res.status(200).send({
     "meta": {
-      "result": true,
+      "error": false,
       "code": statusCode,
       "total": total,
       "pagination": {
@@ -38,9 +38,9 @@ exports.errResp = function(
   statusCode,
   msg=null
 ) {
-  return res.status(statusCode).send({
+  return res.status(200).send({
     "meta": {
-      "result": false,
+      "error": true,
       "code": statusCode,
       "msg": msg
     }

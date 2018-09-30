@@ -23,6 +23,10 @@ $(function() {
       postOneMessageAjax();
     }
 
+    delMessage() {
+      delOneMessageAjax();
+    }
+
     onClick(event) {
       let action = event.target.dataset.action;
       if (action) {
@@ -98,9 +102,9 @@ $(function() {
     ).then(response => response.json());
 
     if (res && res.meta && res.meta.total > 0) {
-      if (res.data.length === undefined) {
-        res.data = [res.data];
-      }
+      // obj returned instead of array
+      res.data = res.data.length === undefined ? [res.data] : res.data;
+
       displayMessages(res.data);
     } else if (res.meta.total == 0) {
       alert(`Can't find that message...`);
@@ -139,6 +143,7 @@ $(function() {
       ).then(response => response.json());
       console.log(res);
       if (res && res.meta && res.meta.code && res.meta.code == 201) {
+        document.querySelector('#message_input').value = '';
         getMessagesAjax();
       } else {
         alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
@@ -146,6 +151,35 @@ $(function() {
     }
   }
 
+
+  /**
+   * Ajax, call server to delete one of your own msg
+   */
+  async function delOneMessageAjax() {
+    let oneMsgId = '';
+    if (+document.querySelector('#delMessageById').value) {
+      oneMsgId = +document.querySelector('#delMessageById').value;
+
+      const res = await fetch(
+        `/api/v1/messages/${oneMsgId}`,
+        {
+          method: "DELETE"
+        }
+      ).then(response => response ? response.json() : {})
+      .catch();
+
+      console.log(res);
+
+      if (res && res.meta && res.meta.code && res.meta.code == 204) {
+        alert(`OK! ${res.meta.msg}`);
+        getMessagesAjax();
+      } else {
+        alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
+      }
+    } else {
+      alert(`Message ID is required for delete`);
+    }
+  };
 
 });
 </script>

@@ -38,7 +38,7 @@ exports.getMessages = function(req,res) {
   }).catch( err => {
     console.log(err);
     // Error
-    helper.errResp(res, 404, 'Error: Can not get Messages!');
+    helper.okResp(res, 404, 'Error: Can not get Messages!');
   });
 }
 
@@ -50,7 +50,7 @@ exports.getOneMessage = function(req,res) {
 
   if (!Number.isInteger(getOneMsgId) || getOneMsgId < 1 ) {
     // Error, wrong id
-    helper.errResp(
+    helper.okResp(
       res, 400, 'Error: Message id should be interger and greater than 0'
     );
   } else {
@@ -78,16 +78,27 @@ exports.getOneMessage = function(req,res) {
         attributes: ['first_name','last_name']
       }]
     }).then( resData => {
-      // edge case - palindrome == null
-      if ( helper.deepGet(resData, ["dataValues","palindrome"], null) ) {
-        // TODO - should update DB for this row since we calculated isPalindrome here
-        // But this should be a very rare case
-        resData.dataValues.palindrome = helper.isPalindrome(
-          helper.deepGet(resData, ["dataValues","content"], null)
-        );
+      if (!resData) {
+        // Can't find it
+        helper.okResp(res, 404, 'Message dos not exsits');
+      } else {
+        // edge case - palindrome == null
+        if (helper.deepGet(resData, ["dataValues","palindrome"], null) == null) {
+          resData.dataValues.palindrome = helper.isPalindrome(
+            helper.deepGet(resData, ["dataValues","content"], null)
+          );
+
+          Messages.update({
+            palindrome: resData.dataValues.palindrome
+          }, {
+            where: {
+              id: getOneMsgId
+            }
+          });
+        }
+        // OK
+        return helper.okResp(res, 200, 'OK', resData);
       }
-      // OK
-      helper.okResp(res, 200, 'OK', resData);
     }).catch( err => {
       console.log(err);
       // Error
@@ -103,7 +114,7 @@ exports.deleteOneMessage = function(req,res) {
   const delOneMsgId = req.params && +req.params.id ? +req.params.id : null;
 
   if (!Number.isInteger(delOneMsgId) || delOneMsgId < 1 ) {
-    helper.errResp(
+    helper.okResp(
       res, 400, 'Error: Message id should be interger and greater than 0'
     );
   }
@@ -116,18 +127,18 @@ exports.deleteOneMessage = function(req,res) {
   }).then( msg => {
     // Can not find msg
     if (!msg) {
-      helper.errResp(res, 404, 'Message dos not exsits');
+      helper.okResp(res, 404, 'Message dos not exsits');
     } else {
       let msg_user_id = helper.deepGet(msg, ["dataValues","user_id"], null);
       let req_user_id = helper.deepGet(req, ["user","id"], null);
 
       if (msg_user_id === req_user_id) {
-        msg.update({status: 0});
         // OK, message deleted
-        helper.okResp(res, 204, 'The message was successfully deleted');
+        msg.update({status: 0});
+        return helper.okResp(res, 204, 'The message was successfully deleted');
       } else {
         // Unauthorized, Not msg owner
-        helper.errResp(res, 401, 'Unauthorized');
+        helper.okResp(res, 401, 'Unauthorized');
       }
     }
   }).catch( err => {
@@ -160,7 +171,7 @@ exports.postMessage = function(req,res) {
     }).catch( err => {
       console.log(err);
       // Error
-      helper.errResp(res, 400, 'Bad Request: Can not post your message!');
+      helper.errResp(res, 404, 'Error: Can not post your message!');
     });
   }
 }
