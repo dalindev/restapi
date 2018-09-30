@@ -43,8 +43,9 @@ restapi
 ## v1 API documentation
 
 ### NOTE: 
-    * HTTP Status Codes will always be `200 OK`
-    * However, the status code and error status can be found here:
+  * HTTP Status Codes will always be `200 OK`
+  * However, the status code and error status can be found here:
+
         ```
             {     
                 'meta': {
