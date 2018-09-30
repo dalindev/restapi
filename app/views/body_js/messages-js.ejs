@@ -1,9 +1,11 @@
 <!-- Messages JavaScript -->
 <script type="text/javascript">
 $(function() {
+
   const escapeTags = Object.assign(HelperToolsClass.escapeTags);
   const btnDebounce = Object.assign(HelperToolsClass.btnDebounce);
   const isNumberKey = Object.assign(HelperToolsClass.isNumberKey);
+
 
   // -------------- Events delegation -------------
   class InputBox {
@@ -31,46 +33,34 @@ $(function() {
   }
   new InputBox(input_box);
 
+
   // take integer input only
   if (document.querySelector('#getMessageById')) {
     document.querySelector('#getMessageById').addEventListener('keypress', isNumberKey);
   }
 
+
   // ------------------ Functions -----------------
-  async function getMessagesAjax() {
-    let oneMsgId = '';
-    if (+document.querySelector('#getMessageById').value) {
-      oneMsgId = '/' + +document.querySelector('#getMessageById').value;
-    }
-    const res = await fetch(
-      `/api/v1/messages${oneMsgId}`,
-      {
-        method: "GET"
-      }
-    ).then(response => response.json());
-
-    if (res && res.meta && res.meta.result) {
-      displayMessages(res.data);
-    } else {
-      alert(`Error ${res.code} : ${res.msg}`);
-    }
-  };
-  getMessagesAjax(); // run once for page load
-
-
+  /**
+   * display one or mutiple msgs
+   */
   function displayMessages(dataObj) {
+
     let userId = -1;
     if (typeof(Storage) !== "undefined" &&
         window.sessionStorage.getItem('restapi_user_id')) {
       userId = window.sessionStorage.getItem('restapi_user_id');
     }
+
     let msgsBox = document.querySelector('#msgs_box');
     msgsBox.innerHTML = '';
+
     dataObj.forEach(function(msg) {
       // highlight your own msg
       let styleType = msg.user_id == userId ? 'info' : 'secondary';
       let isPal = msg.palindrome != null ?
         msg.palindrome == true ? ' / <span>isPal: Yes</span>' : ' / <span>isPal: No</span>' : '';
+
       msgsBox.innerHTML += `
         <div class="row">
           <div class="col-sm-3 col-lg-2 text-right">
@@ -90,6 +80,41 @@ $(function() {
     }
   }
 
+
+  // ------------------ Ajax call -----------------
+  /**
+   * Ajax, call server to get msg/msgs
+   */
+  async function getMessagesAjax() {
+    let oneMsgId = '';
+    if (+document.querySelector('#getMessageById').value) {
+      oneMsgId = '/' + +document.querySelector('#getMessageById').value;
+    }
+    const res = await fetch(
+      `/api/v1/messages${oneMsgId}`,
+      {
+        method: "GET"
+      }
+    ).then(response => response.json());
+
+    if (res && res.meta && res.meta.total > 0) {
+      if (res.data.length === undefined) {
+        res.data = [res.data];
+      }
+      displayMessages(res.data);
+    } else if (res.meta.total == 0) {
+      alert(`Can't find that message...`);
+    } else {
+      alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
+    }
+  };
+  // run once for page load
+  getMessagesAjax();
+
+
+  /**
+   * Ajax, call server to post one msg
+   */
   async function postOneMessageAjax() {
     let msginput = document.querySelector('#message_input') &&
       document.querySelector('#message_input').value;
@@ -112,13 +137,15 @@ $(function() {
           })
         }
       ).then(response => response.json());
-
-      if (res && res.meta && res.meta.result) {
+      console.log(res);
+      if (res && res.meta && res.meta.code && res.meta.code == 201) {
         getMessagesAjax();
       } else {
-        alert(`Error ${res.meta.code} : ${res.meta.msg}`);
+        alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
       }
     }
   }
+
+
 });
 </script>

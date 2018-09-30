@@ -112,13 +112,27 @@ app.get('/', function (req, res) {
 
 // Route not found (404)
 app.use(function(req, res, next) {
-  return res.status(404).send({ message: 'Route'+req.url+' Not found.' });
+  return res.status(404).send({
+    "meta": {
+      "result": false,
+      "total": 0,
+      "code": 404,
+      "msg": `Oh no, we lost! Route ${req.url} Not found.`
+    }
+  });
 });
 
 
 // other error
 app.use(function(err, req, res, next) {
-  return res.status(500).send({ error: err });
+  return res.status(500).send({
+    "meta": {
+      "result": false,
+      "total": 0,
+      "code": 500,
+      "msg": err
+    }
+  });
 });
 
 

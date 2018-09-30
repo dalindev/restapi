@@ -1,3 +1,5 @@
+"use strict";
+
 var exports = module.exports = {}
 
 exports.signup = function(req,res){

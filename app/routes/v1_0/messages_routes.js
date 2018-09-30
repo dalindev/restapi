@@ -9,7 +9,7 @@ module.exports = function(app){
   app.get('/api/v1/messages/:id', listMessagesCtrl.getOneMessage);
 
   // delete one message
-  // app.delete('/api/v1/messages/:id', isLoggedIn, listMessagesCtrl.deleteOneMessage);
+  app.delete('/api/v1/messages/:id', isLoggedIn, listMessagesCtrl.deleteOneMessage);
 
   // post one message
   app.post('/api/v1/message', isLoggedIn, listMessagesCtrl.postMessage);

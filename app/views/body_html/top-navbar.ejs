@@ -10,8 +10,8 @@
       </li>
     </ul>
     <div class="form-inline pull-right">
-      <!-- if user logged in  -->
       <% if (user) { %>
+      <!-- if user logged in  -->
       <script type="text/javascript">
         if (typeof(Storage) !== "undefined") {
           window.sessionStorage.setItem('restapi_user_id', <%= user.id %>);
@@ -20,6 +20,7 @@
       <span class="form-inline" style="color: white;">Welcome!&nbsp;<a style="color: aqua;"><%= user.first_name %> <%= user.last_name %></a></span>
       <a href="/logout" class="nav-link nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i> Logout</a>
       <% } else { %>
+      <!-- user not logged in  -->
       <script type="text/javascript">
         if (typeof(Storage) !== "undefined") {
           window.sessionStorage.removeItem('restapi_user_id');
