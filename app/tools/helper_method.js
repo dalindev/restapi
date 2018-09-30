@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 const emojiStrip = require('emoji-strip');
-var exports = module.exports = {};
+let exports = module.exports = {};
 
 
 exports.okResp = function(
@@ -10,7 +10,7 @@ exports.okResp = function(
   msg=null,
   data=null,
   limit=null,
-  page=null,
+  page=null
 ) {
   let total = 0;
   if (data) {
@@ -18,17 +18,17 @@ exports.okResp = function(
       (data instanceof Object && Object.keys(data).length > 0 ? 1 : 0);
   }
   return res.status(200).send({
-    "meta": {
-      "error": false,
-      "code": statusCode,
-      "total": total,
-      "pagination": {
-        "limit": limit,
-        "page": page
+    'meta': {
+      'error': false,
+      'code': statusCode,
+      'total': total,
+      'pagination': {
+        'limit': limit,
+        'page': page,
       },
-      "msg": msg
+      'msg': msg,
     },
-    "data": data
+    'data': data,
   });
 };
 
@@ -39,46 +39,46 @@ exports.errResp = function(
   msg=null
 ) {
   return res.status(200).send({
-    "meta": {
-      "error": true,
-      "code": statusCode,
-      "msg": msg
-    }
+    'meta': {
+      'error': true,
+      'code': statusCode,
+      'msg': msg,
+    },
   });
 };
 
 
 exports.isPalindrome = function(s='ab') {
-  let tmp = emojiStrip(s).toLowerCase().replace(/[^a-zA-Z0-9]+/g, "").split("");
+  let tmp = emojiStrip(s).toLowerCase().replace(/[^a-zA-Z0-9]+/g, '').split('');
   let lo = 0;
   let hi = tmp.length-1;
 
   while (lo < hi) {
-      if (tmp[lo] === tmp[hi]) {
-          lo++;
-          hi--;
-      } else {
-          return false;
-      }
+    if (tmp[lo] === tmp[hi]) {
+      lo++;
+      hi--;
+    } else {
+      return false;
+    }
   }
 
   return true;
-}
+};
 
 
 exports.deepGet = function(obj, prop) {
   if (obj === undefined || obj === null) {
-      return;
+    return;
   }
 
   // var found!
   if (prop.length === 0) {
-      return obj;
+    return obj;
   }
 
   let foundSoFar = obj[prop[0]];
   let remainingProp = prop.slice(1);
 
   return exports.deepGet(foundSoFar, remainingProp);
-}
+};
 
