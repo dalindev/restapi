@@ -65,15 +65,17 @@ restapi
 * **Error Response:**
 
   * **Code:** 404 NOT FOUND <br />
-  ```json
-    {     
-    'meta': {
-      'error': true,
-      'code': 404,
-      'msg': 'Error: Can not get Messages!',
-    }, }
-```
+      ```json
+        {     
+            'meta': {
+              'error': true,
+              'code': 404,
+              'msg': 'Error: Can not get Messages!',
+            }, 
+        }
+    ```
 
+<br />
 * **Sample Response:**
 
   ```json
