@@ -6,8 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # config file (db connection, session key etc...)
-config
-config/config.json
+config/conf.json
 
 # Runtime data
 pids
