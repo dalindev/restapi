@@ -18,6 +18,8 @@ exports.getMessages = function(req,res){
 
   res.setHeader('Content-Type', 'application/json');
 
+  // console.log(req.params);
+
   const whereClause = {status: 1};
 
   // TODO - pagination

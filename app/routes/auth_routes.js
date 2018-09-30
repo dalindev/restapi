@@ -18,7 +18,7 @@ module.exports = function(app,passport){
     failureFlash: true
   }));
 
-  // l--------- ogout ---------
+  // --------- logout ---------
   app.get('/logout',authController.logout);
 
   /**

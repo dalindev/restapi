@@ -6,23 +6,27 @@ $(function() {
 
   // -------------- Events delegation -------------
   class InputBox {
+
     constructor(elem) {
       this._elem = elem;
       elem.onclick = this.onClick.bind(this); // (*)
     }
+
     getMessages() {
       getMessagesAjax();
     }
+
     postMessage() {
       postOneMessageAjax();
     }
+
     onClick(event) {
       let action = event.target.dataset.action;
       if (action) {
         btnDebounce(event.target);
         this[action]();
       }
-    };
+    }
   }
   new InputBox(input_box);
 
