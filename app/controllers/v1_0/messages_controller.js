@@ -4,16 +4,29 @@ var exports = module.exports = {}
 var emojiStrip = require('emoji-strip');
 const models = require("../../models");
 
-exports.errResponse = function(res, result, errCode, msg=null, data=null) {
-  return res.status(errCode).send({
+
+exports.resResponse = function(
+  res,
+  result,
+  statusCode,
+  msg=null,
+  data=null
+) {
+  return res.status(statusCode).send({
     "meta": {
       "result": result,
-      "code": errCode,
+      "total": data && data.length ? data.length : 0,
+      "pagination": {
+        "limit": null,
+        "page": null
+      },
+      "code": statusCode,
       "msg": msg
     },
     "data": data
   })
 };
+
 
 exports.isPalindrome = function(s='ab') {
   let tmp = emojiStrip(s).toLowerCase().replace(/[^a-zA-Z0-9]+/g, "").split("");
@@ -32,24 +45,13 @@ exports.isPalindrome = function(s='ab') {
   return true;
 }
 
-exports.getMessages = function(req,res) {
 
+exports.getMessages = function(req,res) {
   const Messages = models.Messages;
+  // Can easily add search param in the future
+  const whereClause = {status: 1};
 
   res.setHeader('Content-Type', 'application/json');
-
-  const getOneMsg = req.params && req.params.id ? req.params.id : null;
-
-  const whereClause = {status: 1};
-  if (getOneMsg) {
-    if (!Number.isInteger(+req.params.id) || +req.params.id < 1 ) {
-      return exports.errResponse(res, false, 400,
-        'Error: Message id should be interger and greater than 0'
-      );
-    }
-    whereClause.id = getOneMsg
-  }
-
   // TODO - rate limit
   // TODO - pagination limit/page (ex: 20/0 )
   // TODO - ondemand, ex: load msg after id 300
@@ -71,23 +73,66 @@ exports.getMessages = function(req,res) {
       model: models.User,
       attributes: ['first_name','last_name']
     }]
-  }).then( msgs => {
-    // edge case - palindrome == null
-    if (getOneMsg &&
-      msgs[0] &&
-      msgs[0].dataValues &&
-      msgs[0].dataValues.palindrome == null
-    ) {
-      // TODO - should update DB for this row since we calculated isPalindrome
-      msgs[0].dataValues.palindrome = exports.isPalindrome(msgs[0].dataValues.content);
-    }
-
-    return exports.errResponse(res, true, 200, 'ok', msgs);
+  }).then( resData => {
+    return exports.resResponse(res, true, 200, 'ok', resData);
   }).catch( err => {
     console.log(err);
-    return exports.errResponse(res, false, 404, 'Error: Can not get Messages!');
+    return exports.resResponse(res, false, 404, 'Error: Can not get Messages!');
   });
 }
+
+
+exports.getOneMessage = function(req,res) {
+  const Messages = models.Messages;
+  const getOneMsgId = req.params && +req.params.id ? +req.params.id : null;
+  const whereClause = {status: 1};
+
+  if (!Number.isInteger(getOneMsgId) || getOneMsgId < 1 ) {
+    return exports.resResponse(res, false, 400,
+      'Error: Message id should be interger and greater than 0'
+    );
+  }
+  whereClause.id = getOneMsgId
+
+  res.setHeader('Content-Type', 'application/json');
+  // TODO - rate limit
+  // TODO - pagination limit/page (ex: 20/0 )
+  // TODO - ondemand, ex: load msg after id 300
+  Messages.findAll({
+    order: [
+      ['id', 'ASC']
+    ],
+    attributes: [
+      'id',
+      'user_id',
+      'content',
+      'createdAt',
+      'User.first_name',
+      'User.last_name',
+      'palindrome'
+    ],
+    where: whereClause,
+    include: [{
+      model: models.User,
+      attributes: ['first_name','last_name']
+    }]
+  }).then( resData => {
+    // edge case - palindrome == null
+    if ( resData[0] &&
+      resData[0].dataValues &&
+      resData[0].dataValues.palindrome == null
+    ) {
+      // TODO - should update DB for this row since we calculated isPalindrome here
+      // But this should be a very rare case
+      resData[0].dataValues.palindrome = exports.isPalindrome(resData[0].dataValues.content);
+    }
+    return exports.resResponse(res, true, 200, 'ok', resData);
+  }).catch( err => {
+    console.log(err);
+    return exports.resResponse(res, false, 404, 'Error: Can not get Messages!');
+  });
+}
+
 
 exports.postMessage = function(req,res) {
 
@@ -106,10 +151,10 @@ exports.postMessage = function(req,res) {
       content: req.body.data.message,
       palindrome: isPalin
     }).then( msg => {
-      return exports.errResponse(res, true, 201, 'Created', msg);
+      return exports.resResponse(res, true, 201, 'Created', msg);
     }).catch( err => {
       console.log(err);
-      return exports.errResponse(res, false, 400, 'Bad Request: Can not post your message!');
+      return exports.resResponse(res, false, 400, 'Bad Request: Can not post your message!');
     });
   }
 }

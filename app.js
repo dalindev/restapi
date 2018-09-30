@@ -19,6 +19,7 @@ const passport      = require('passport');
 // display msg in session
 const flash         = require('connect-flash');
 
+
 /* ------------------------------------------- */
 if(process.env.NODE_ENV == undefined) {
   process.env.NODE_ENV = 'development';
@@ -63,10 +64,12 @@ app.use(flash()) // flash messages stored in session
 app.set('view engine', 'ejs');
 app.set('views', './app/views')
 
+
 /**
  *  models
  */
 const models = require("./app/models");
+
 
 /**
  *  routes
@@ -77,6 +80,8 @@ const passportRoute = require('./app/config/passport/passport.js')(passport,mode
 const authRoute = require('./app/routes/auth_routes.js')(app,passport);
 
 const apiV1 = require('./app/routes/v1_0/messages_routes.js')(app);
+
+
 /**
  *  database
  */
@@ -85,6 +90,7 @@ models.sequelize.sync().then(function(){
 }).catch(function(err){
   console.log(err, "Something went wrong with the Database Update!")
 });
+
 
 /**
  *  home page
@@ -103,15 +109,18 @@ app.get('/', function (req, res) {
   }
 });
 
+
 // Route not found (404)
 app.use(function(req, res, next) {
   return res.status(404).send({ message: 'Route'+req.url+' Not found.' });
 });
 
+
 // other error
 app.use(function(err, req, res, next) {
   return res.status(500).send({ error: err });
 });
+
 
 /* Start app --------------------------------- */
 var server = app.listen(port, '127.0.0.1', function () {

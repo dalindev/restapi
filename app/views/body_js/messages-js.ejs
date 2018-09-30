@@ -31,7 +31,7 @@ $(function() {
   }
   new InputBox(input_box);
 
-  // should take integer input only
+  // take integer input only
   if (document.querySelector('#getMessageById')) {
     document.querySelector('#getMessageById').addEventListener('keypress', isNumberKey);
   }
@@ -56,6 +56,7 @@ $(function() {
     }
   };
   getMessagesAjax(); // run once for page load
+
 
   function displayMessages(dataObj) {
     let userId = -1;
