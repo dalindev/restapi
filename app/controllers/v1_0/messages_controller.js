@@ -1,7 +1,5 @@
 'use strict';
 
-let exports = module.exports = {};
-
 const models = require('../../models');
 const helper = require('../../tools/helper_method');
 

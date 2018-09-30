@@ -1,7 +1,6 @@
 'use strict';
 
 const emojiStrip = require('emoji-strip');
-let exports = module.exports = {};
 
 
 exports.okResp = function(
