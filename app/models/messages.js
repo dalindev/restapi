@@ -6,6 +6,8 @@ module.exports = function(sequelize, DataTypes) {
     content: { type:DataTypes.TEXT},
     palindrome: { type: DataTypes.BOOLEAN, allowNull: true},
     status: {type: DataTypes.INTEGER(2), defaultValue:1}
+  }, {
+    charset: 'utf8mb4'
   });
 
   Messages.associate = function (models) {

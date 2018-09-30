@@ -1,14 +1,32 @@
 var exports = module.exports = {}
 const models = require("../../models");
 
+exports.errResponse = function (res, result, errCode, msg='', data='') {
+  return res.status(errCode).send({
+    "meta": {
+      "result": result,
+      "code": errCode,
+      "msg": msg
+    },
+    "data": data
+  })
+};
+
 exports.getMessages = function(req,res){
 
   const Messages = models.Messages;
 
   res.setHeader('Content-Type', 'application/json');
 
-  // TODO - paging
+  const whereClause = {status: 1};
+
+  // TODO - pagination
+  // TODO - ondemand, ex: load msg after id 300
+  // TODO - sort
   Messages.findAll({
+    order: [
+      ['id', 'ASC']
+    ],
     attributes: [
       'id',
       'user_id',
@@ -17,41 +35,36 @@ exports.getMessages = function(req,res){
       'User.first_name',
       'User.last_name'
     ],
-    where: {
-      status: 1
-    },
+    where: whereClause,
     include: [{
       model: models.User,
       attributes: ['first_name','last_name']
     }]
   }).then( msgs => {
-    // TODO - response helper
-    res.status(200).send({
-      "meta": {
-        "result": true,
-        "code": 200,
-        "msg": "OK"
-      },
-      "data": msgs
-    });
+    return exports.errResponse(res, true, 200, 'ok', msgs);
   }).catch( err => {
     console.log(err);
-    // TODO - response helper
-    res.status(404).send({
-      "meta": {
-        "result": false,
-        "code": 404,
-        "msg": 'Error: Can not get Messages'
-      }
-    });
+    return exports.errResponse(res, false, 404, 'Error: Can not get Messages!');
   });
 }
 
 exports.postMessage = function(req,res){
   const Messages = models.Messages;
 
-  console.log(req);
+  // 400 Bad Request
+  // 413 Payload Too Large
+  // TODO - content size limit
 
-  res.status(200).send('looks ok to me...');
+  if(req.body && req.body.data && req.body.data.message) {
+    Messages.create({
+      user_id: req.user.id,
+      content: req.body.data.message,
+    }).then(msg => {
+      return exports.errResponse(res, true, 201, 'Created', msg);
+    }).catch( err => {
+      console.log(err);
+      return exports.errResponse(res, false, 400, 'Bad Request: Can not post your message!');
+    });
+  }
 }
 

@@ -1,7 +1,7 @@
 <!-- Messages JavaScript -->
 <script type="text/javascript">
 $(function() {
-  const debounceF = Object.assign(HelperToolsClass.debounceFirst);
+  const escapeTags = Object.assign(HelperToolsClass.escapeTags);
   const btnDebounce = Object.assign(HelperToolsClass.btnDebounce);
 
   // -------------- Events delegation -------------
@@ -31,24 +31,29 @@ $(function() {
     const res = await fetch(
       '/api/v1/messages',
       {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "same-origin", // no-cors, cors, *same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, same-origin, *omit
+        method: "GET"
       }
     ).then(response => response.json());
 
-    if(res.meta.result) {
+    if(res && res.meta && res.meta.result) {
       displayMessages(res.data);
     } else {
       alert(`Error ${res.code} : ${res.msg}`);
     }
-  }
+  };
+  getMessagesAjax(); // run once for page load
 
   function displayMessages(dataObj) {
+    let userId = -1;
+    if (typeof(Storage) !== "undefined" &&
+        window.sessionStorage.getItem('restapi_user_id')) {
+      userId = window.sessionStorage.getItem('restapi_user_id');
+    }
     let msgsBox = document.querySelector('#msgs_box');
     msgsBox.innerHTML = '';
     dataObj.forEach(function(msg) {
+      // highlight your own msg
+      let styleType = msg.user_id == userId ? 'info' : 'secondary';
       msgsBox.innerHTML += `
         <div class="row">
           <div class="col-sm-3 col-lg-2 text-right">
@@ -56,10 +61,14 @@ $(function() {
             <span>MsgID: ${msg.id}</span>
           </div>
           <div class="col-sm-9 col-lg-10">
-          <div class="alert alert-secondary" role="alert">${msg.content}</div>
+          <div class="alert alert-${styleType} msgs" role="alert">${escapeTags(msg.content)}</div>
           </div>
         </div>`;
     });
+
+    // scroll to last msg
+    const l = document.querySelectorAll(".msgs").length;
+    document.querySelectorAll(".msgs")[l-1].scrollIntoView();
   }
 
   async function postOneMessageAjax() {
@@ -72,18 +81,24 @@ $(function() {
       const res = await fetch(
         '/api/v1/message',
         {
-          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          method: "POST",
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            data: msginput
+            "data": {
+              "message": msginput
+            }
           })
         }
       ).then(response => response.json());
 
-      console.log('post msg res ->', res);
+      if(res && res.meta && res.meta.result) {
+        getMessagesAjax();
+      } else {
+        alert(`Error ${res.meta.code} : ${res.meta.msg}`);
+      }
     }
   }
 });

@@ -43,11 +43,11 @@ class HelperToolsClass {
     }
 
     /**
-     *  delay a call for JavaScript
+     *  escapeTags for JavaScript
      */
-    static delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
+    static escapeTags(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') ;
+    }
 };
 
 </script>

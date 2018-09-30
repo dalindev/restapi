@@ -1,34 +1,6 @@
 <div class="container user-msgs-container">
   <div class="row">
     <div class="msgs-box w-100" id="msgs_box">
-      <div class="row">
-        <div class="col-sm-3 col-lg-2 text-right">
-          <span>User 1234: </span>
-        </div>
-        <div class="col-sm-9 col-lg-10">
-        <div class="alert alert-secondary" role="alert">
-          This is a secondary alert—check it out! 😌😌😌
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-        </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-3 col-lg-2 text-right">
-          <span>User 1234: </span>
-        </div>
-        <div class="col-sm-9 col-lg-10">
-        <div class="alert alert-secondary" role="alert">
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-          This is a secondary alert—check it out!
-        </div>
-        </div>
-      </div>
     </div>
   </div>
   <hr>
@@ -43,7 +15,7 @@
           <textarea class="form-control" placeholder="Your messages here..." rows="2" id="message_input"></textarea>
         </div>
         <div class="col-md-2">
-          <button type="button" class="btn btn-success pull-right" id="post_now">Post Now</button>
+          <button type="button" class="btn btn-success pull-right" data-action="postMessage">Post Now</button>
         </div>
       </div>
       <% } else { %>
