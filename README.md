@@ -2,7 +2,7 @@
 
 
 ### Project structure 
-
+```
 restapi
 │
 ├── app.js
@@ -37,7 +37,7 @@ restapi
          ├── header [folder]
          ├── pages [folder]
          └── index.ejs
-
+```
 
 
 ## v1 API documentation
