@@ -4,17 +4,40 @@ const models = require('../../models');
 const helper = require('../../tools/helper_method');
 
 
+/**
+ * Get messages (option: search terms)
+ *
+ * @param {object} req The request
+ * @param {object} res The response
+ */
 exports.getMessages = function(req, res) {
   const Messages = models.Messages;
-  // Can easily add search param in the future
-  const whereClause = {status: 1};
 
-  // TODO - rate limit
-  // TODO - pagination limit/page (ex: 20/0 )
-  // TODO - ondemand, ex: load msg after id 300
+  // Can easily add search param in the future
+  // requested filter
+  const reqq = req.query || {};
+  // applied filter
+  const rqq = {};
+
+  // Search term
+  rqq.limit = reqq.limit !== undefined &&
+                Number.isInteger(+reqq.limit) &&
+                +reqq.limit > -1 ? +reqq.limit : 1000;
+
+  rqq.order = reqq.order !== undefined &&
+                ['ASC', 'DESC'].indexOf(reqq.order.toUpperCase()) > -1
+    ? reqq.order.toUpperCase() : 'ASC';
+
+  rqq.offset = reqq.offset !== undefined &&
+                Number.isInteger(+reqq.offset) &&
+                +reqq.offset > -1 ? +reqq.offset : 0;
+
+  // TODO - rate limit (DDOS)
   Messages.findAll({
+    offset: rqq.offset,
+    limit: rqq.limit,
     order: [
-      ['id', 'ASC'],
+      ['id', rqq.order],
     ],
     attributes: [
       'id',
@@ -25,14 +48,16 @@ exports.getMessages = function(req, res) {
       'User.last_name',
       'palindrome',
     ],
-    where: whereClause,
+    where: {
+      status: 1,
+    },
     include: [{
       model: models.User,
       attributes: ['first_name', 'last_name'],
     }],
   }).then( (resData) => {
     // OK
-    helper.okResp(res, 200, 'ok', resData);
+    helper.okResp(res, 200, 'ok', resData, rqq);
   }).catch( (err) => {
     console.log(err);
     // Error
@@ -41,6 +66,12 @@ exports.getMessages = function(req, res) {
 };
 
 
+/**
+ * Get one message with id
+ *
+ * @param {object} req The request
+ * @param {object} res The response
+ */
 exports.getOneMessage = function(req, res) {
   const Messages = models.Messages;
   const getOneMsgId = req.params && +req.params.id ? +req.params.id : null;
@@ -107,6 +138,12 @@ exports.getOneMessage = function(req, res) {
 };
 
 
+/**
+ * Delete one message with id
+ *
+ * @param {object} req The request
+ * @param {object} res The response
+ */
 exports.deleteOneMessage = function(req, res) {
   const Messages = models.Messages;
   const delOneMsgId = req.params && +req.params.id ? +req.params.id : null;
@@ -147,6 +184,12 @@ exports.deleteOneMessage = function(req, res) {
 };
 
 
+/**
+ * Post one message
+ *
+ * @param {object} req The request
+ * @param {object} res The response
+ */
 exports.postMessage = function(req, res) {
   const Messages = models.Messages;
 

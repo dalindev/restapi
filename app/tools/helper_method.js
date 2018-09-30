@@ -8,8 +8,7 @@ exports.okResp = function(
   statusCode,
   msg=null,
   data=null,
-  limit=null,
-  page=null
+  searchTerm={}
 ) {
   let total = 0;
   if (data) {
@@ -21,10 +20,7 @@ exports.okResp = function(
       'error': false,
       'code': statusCode,
       'total': total,
-      'pagination': {
-        'limit': limit,
-        'page': page,
-      },
+      'applied_filter': searchTerm,
       'msg': msg,
     },
     'data': data,
