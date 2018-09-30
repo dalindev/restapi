@@ -42,7 +42,7 @@ restapi
 
 ## v1 API documentation
 
-###NOTE: 
+### NOTE: 
     * HTTP Status Codes will always be `200 OK`
     * However, the status code and error status can be found here:
         ```
