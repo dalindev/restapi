@@ -61,7 +61,7 @@ exports.getMessages = function(req, res) {
   }).catch( (err) => {
     console.log(err);
     // Error
-    helper.okResp(res, 404, 'Error: Can not get Messages!');
+    helper.errResp(res, 404, 'Error: Can not get Messages!');
   });
 };
 
