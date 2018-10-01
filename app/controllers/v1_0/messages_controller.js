@@ -71,6 +71,7 @@ exports.getMessages = function(req, res) {
  *
  * @param {object} req The request
  * @param {object} res The response
+ * @return {json}
  */
 exports.getOneMessage = function(req, res) {
   const Messages = models.Messages;
@@ -134,7 +135,6 @@ exports.getOneMessage = function(req, res) {
     // Error
     helper.errResp(res, 404, 'Error: Can not get Messages!');
   });
-
 };
 
 
@@ -143,6 +143,7 @@ exports.getOneMessage = function(req, res) {
  *
  * @param {object} req The request
  * @param {object} res The response
+ * @return {json}
  */
 exports.deleteOneMessage = function(req, res) {
   const Messages = models.Messages;
@@ -171,7 +172,7 @@ exports.deleteOneMessage = function(req, res) {
     include: [{
       model: models.User,
       attributes: ['first_name', 'last_name'],
-    }]
+    }],
   }).then( (msg) => {
     // Can not find msg
     if (!msg) {
@@ -183,7 +184,8 @@ exports.deleteOneMessage = function(req, res) {
       if (msgUserId === reqUserId) {
         // OK, message deleted
         msg.update({status: 0});
-        return helper.okResp(res, 204, 'The message was successfully deleted', msg);
+        return helper.okResp(res, 204,
+          'The message was successfully deleted', msg);
       } else {
         // Unauthorized, Not msg owner
         helper.okResp(res, 401, 'Unauthorized');
