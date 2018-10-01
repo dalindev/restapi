@@ -44,10 +44,10 @@ restapi
 <br />
 <br />
 
-## Setup
+## Setup for localhost
 
 1. `git clone` this project
-2. `npm install`
+2. `npm install` (Nodejs version `v8.12.0`)
 3. make sure you have MySQL database running
 4. Create a config file `conf.json` at here `/restapi/config/conf.json`, put your db pwd, generate a session secret too. (never share your session secret)
 ```json
@@ -77,6 +77,20 @@ restapi
       }
     }
 ```
+
+<br />
+
+## Setup for AWS
+1. Connect to EC2 instance (SSH or ...)
+2. Install Git, Nodejs(8.12.0), MySQL(5.7+), PM2
+3. login into MySQL 
+  - Create a new database call it restapi or your choice
+  - and craete a new user with password, grant all right of the new database
+    for ex: `GRANT ALL PRIVILEGES ON restapi.* TO 'dalinhuang'@'%';`
+4. clone project, `npm install` ... (similar to local setup), create and update conf.json
+5. goto project root, start app use `pm2 start app.js --name RESTAPI --watch` 
+6. use `pm2 logs` for app logs
+7. the app use port 3000, ex: http://34.202.163.172:3000/
 
 
 <br />
