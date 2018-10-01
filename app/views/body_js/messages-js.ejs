@@ -1,0 +1,197 @@
+<!-- Messages JavaScript -->
+<script type="text/javascript">
+$(function() {
+
+  const escapeTags = Object.assign(HelperToolsClass.escapeTags);
+  const btnDebounce = Object.assign(HelperToolsClass.btnDebounce);
+  const isNumberKey = Object.assign(HelperToolsClass.isNumberKey);
+
+
+  // -------------- Events delegation -------------
+  /**
+   * Events delegation
+   */
+  class InputBox {
+
+    constructor(elem) {
+      this._elem = elem;
+      elem.onclick = this.onClick.bind(this); // (*)
+    }
+
+    getMessages() {
+      getMessagesAjax();
+    }
+
+    postMessage() {
+      postOneMessageAjax();
+    }
+
+    delMessage() {
+      delOneMessageAjax();
+    }
+
+    onClick(event) {
+      let action = event.target.dataset.action;
+      if (action) {
+        btnDebounce(event.target);
+        this[action]();
+      }
+    }
+  }
+  new InputBox(input_box);
+
+
+  // take integer input only
+  if (document.querySelector('#getMessageById')) {
+    document.querySelector('#getMessageById').addEventListener('keypress', isNumberKey);
+  }
+
+
+  // ------------------ Functions -----------------
+  /**
+   * Display messages from API
+   *
+   * @param {obj} dataObj Request
+   */
+  function displayMessages(dataObj) {
+
+    let userId = -1;
+    if (typeof(Storage) !== "undefined" &&
+        window.sessionStorage.getItem('restapi_user_id')) {
+      userId = window.sessionStorage.getItem('restapi_user_id');
+    }
+
+    let msgsBox = document.querySelector('#msgs_box');
+    msgsBox.innerHTML = '';
+
+    dataObj.forEach(function(msg) {
+      // highlight your own msg
+      let styleType = msg.user_id == userId ? 'info' : 'secondary';
+      let isPal = msg.palindrome != null ?
+        msg.palindrome == true ? ' / <span>isPal: Yes</span>' : ' / <span>isPal: No</span>' : '';
+
+      msgsBox.innerHTML += `
+        <div class="row">
+          <div class="col-sm-3 col-lg-2 text-right">
+            <span>${msg.User.first_name} ${msg.User.last_name}</span><br>
+            <span>MID: ${msg.id}</span>${isPal}
+          </div>
+          <div class="col-sm-9 col-lg-10">
+            <div class="alert alert-${styleType} msgs" role="alert">${escapeTags(msg.content)}</div>
+          </div>
+        </div>`;
+    });
+
+    // scroll to last msg
+    const l = document.querySelectorAll(".msgs").length;
+    if (l) {
+      document.querySelectorAll(".msgs")[l-1].scrollIntoView();
+    }
+  }
+
+
+  // ------------------ Ajax call -----------------
+  /**
+   * Ajax, call server to get msg/msgs
+   */
+  async function getMessagesAjax() {
+    let oneMsgId = '';
+    if (+document.querySelector('#getMessageById').value) {
+      oneMsgId = '/' + +document.querySelector('#getMessageById').value;
+    }
+    const res = await fetch(
+      `/api/v1/messages${oneMsgId}`,
+      {
+        method: "GET"
+      }
+    ).then(response => response.json());
+
+    if (res && res.meta && (res.meta.total > 0 || res.data !== null)) {
+      // obj returned instead of array
+      res.data = res.data.length === undefined ? [res.data] : res.data;
+
+      displayMessages(res.data);
+      // reset
+      document.querySelector('#getMessageById').value = '';
+      document.querySelector('#delMessageById').value = '';
+    } else if (res.meta.total == 0) {
+      alert(`Can't find that message...`);
+    } else {
+      alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
+    }
+  };
+  // run once for page load (init)
+  getMessagesAjax();
+
+
+  /**
+   * Ajax, call server to post one msg
+   */
+  async function postOneMessageAjax() {
+    let msginput = document.querySelector('#message_input') &&
+      document.querySelector('#message_input').value;
+
+    if (!msginput) {
+      alert('Empty message or message not valid');
+    } else {
+      const res = await fetch(
+        '/api/v1/message',
+        {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "data": {
+              "message": msginput
+            }
+          })
+        }
+      ).then(response => response.json());
+      console.log(res);
+      if (res && res.meta && res.meta.code && res.meta.code == 201) {
+        // reset
+        document.querySelector('#message_input').value = '';
+        // reload msgs
+        getMessagesAjax();
+      } else {
+        alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
+      }
+    }
+  }
+
+
+  /**
+   * Ajax, call server to delete one of your own msg
+   */
+  async function delOneMessageAjax() {
+    let oneMsgId = '';
+    if (+document.querySelector('#delMessageById').value) {
+      oneMsgId = +document.querySelector('#delMessageById').value;
+
+      const res = await fetch(
+        `/api/v1/messages/${oneMsgId}`,
+        {
+          method: "DELETE"
+        }
+      ).then(response => response ? response.json() : {})
+      .catch();
+
+      if (res && res.meta && res.meta.code && res.meta.code == 204) {
+        alert(`OK! ${res.meta.msg}`);
+        // reset
+        document.querySelector('#delMessageById').value = '';
+        document.querySelector('#getMessageById').value = '';
+        // reload msgs
+        getMessagesAjax();
+      } else {
+        alert(`Status Code ${res.meta.code} : ${res.meta.msg}`);
+      }
+    } else {
+      alert(`Message ID is required for delete`);
+    }
+  };
+
+});
+</script>

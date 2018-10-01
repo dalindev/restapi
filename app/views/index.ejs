@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>RestAPI</title>
+    <%- include('./header/main-header.ejs') %>
+
+    <style></style>
+  </head>
+
+  <body>
+    <%- include('./body_html/top-navbar.ejs', {user: user}); %>
+    <%- include('./body_html/messages-component.ejs', {user: user}); %>
+
+    <%- include('./body_js/main-js.ejs') %>
+    <%- include('./body_js/messages-js.ejs') %>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+/* top-navbar */
+.nav-login-signup {
+  color: lightgray;
+}
+.nav-login-signup:hover {
+  color: white;
+}
+/**
+ *  messages component
+ */
+.user-msgs-container {
+  margin-top: 15px;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+.user-msgs-container .msgs-box {
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  overflow: scroll;
+  height: calc(100vh - 275px);
+}

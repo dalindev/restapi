@@ -1,0 +1,53 @@
+<!-- views/signup.ejs -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Sign Up</title>
+    <%- include('../header/main-header.ejs') %>
+  </head>
+  <body>
+    <%- include('../body_html/top-navbar.ejs', {user: false}); %>
+    <div class="container">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col-lg-6">
+          <br>
+          <h2><span class="fa fa-thumbs-up"></span> Sign Up</h2>
+          <hr>
+          <!-- show any messages that come back with authentication -->
+          <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+          <% } %>
+          <!-- SIGNUP FORM -->
+          <form action="/signup" method="post">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" class="form-control" name="password" required>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-lg-6">
+                <label>First Name</label>
+                <input type="text" class="form-control" name="firstname" required>
+              </div>
+              <div class="col-lg-6">
+                <label>Last Name</label>
+                <input type="text" class="form-control" name="lastname" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success">Signup</button>
+          </form>
+          <hr>
+          <p>Already have an account? <a href="/login">Login</a></p>
+          <p>Or go <a href="/">home</a>.</p>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+    <%- include('../body_js/main-js.ejs') %>
+  </body>
+</html>

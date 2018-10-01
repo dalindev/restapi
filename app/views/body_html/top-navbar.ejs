@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">REST API</a>
+  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#mainNavbars" aria-controls="mainNavbars" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="navbar-collapse collapse" id="mainNavbars" style="">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active" id="home_page">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <div class="form-inline pull-right">
+      <% if (user) { %>
+      <!-- if user logged in  -->
+      <script type="text/javascript">
+        if (typeof(Storage) !== "undefined") {
+          window.sessionStorage.setItem('restapi_user_id', <%= user.id %>);
+        }
+      </script>
+      <span class="form-inline" style="color: white;">Welcome!&nbsp;<a style="color: aqua;"><%= user.first_name %> <%= user.last_name %></a></span>
+      <a href="/logout" class="nav-link nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i> Logout</a>
+      <% } else { %>
+      <!-- user not logged in  -->
+      <script type="text/javascript">
+        if (typeof(Storage) !== "undefined") {
+          window.sessionStorage.removeItem('restapi_user_id');
+        }
+      </script>
+      <a href="/login" class="nav-link nav-login-signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Login</a>
+      <a href="/signup" class="nav-link btn btn-outline-success nav-login-signup"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Sign Up</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

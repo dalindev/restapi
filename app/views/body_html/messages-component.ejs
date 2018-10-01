@@ -1,0 +1,47 @@
+<div class="container user-msgs-container">
+  <div class="row">
+    <div class="msgs-box w-100" id="msgs_box">
+    </div>
+  </div>
+  <hr>
+  <div class="row" id="input_box">
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-5">
+          <input class="form-control" type="number" step="1" min="1" value="" id="getMessageById">
+        </div>
+        <div class="col-7">
+          <button type="button" class="btn btn-outline-primary" data-action="getMessages">Get Message</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <input class="form-control" type="number" step="1" min="1" value="" id="delMessageById">
+        </div>
+        <div class="col-7">
+          <button type="button" class="btn btn-outline-danger" data-action="delMessage">Del Message</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <% if (user) { %>
+      <% } else { %>
+      <% } %>
+      <div class="row">
+        <div class="col-md-10">
+          <textarea class="form-control" placeholder="Your messages here..." rows="2" id="message_input"></textarea>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-success pull-right" data-action="postMessage">Post Now</button>
+        </div>
+      </div>
+      <!--
+      <span class="pull-right">
+        <a href="/login">Please login to post a message</a>
+      </span>
+      -->
+    </div>
+  </div>
+  <div><i class="text-info">Get specific message or get all messages</i></div>
+  <hr>
+</div>
