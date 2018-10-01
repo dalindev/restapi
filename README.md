@@ -71,11 +71,8 @@ restapi
 ## v1 API documentation
 
 ### NOTE: 
-  * HTTP Status Codes will always be `200 OK`
+  * HTTP Status Code will always be `200 OK`
   * However, the status code and error status can be found here:
-  * **Note here:**
-        * `"error": true` for important error.
-
         ```json
         {     
             'meta': {
@@ -85,6 +82,9 @@ restapi
             } 
         }
         ```
+  * **Note here:**
+        * `"error": true` for important error.
+
 
  **GET Messages**
 ----
