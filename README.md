@@ -1,4 +1,4 @@
-# restapi
+# restapi http://34.202.163.172:3000/
 
 
 ### Project structure 
@@ -67,7 +67,8 @@ restapi
           "logging": false,
           "options": {
             "operatorsAliases": false,
-            "dialect": "mysql"
+            "dialect": "mysql",
+            "logging": false
           }
         }
       },
