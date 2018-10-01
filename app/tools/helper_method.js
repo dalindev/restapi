@@ -45,6 +45,8 @@ exports.errResp = function(
 
 exports.isPalindrome = function(s='ab') {
   let tmp = emojiStrip(s).toLowerCase().replace(/[^a-zA-Z0-9]+/g, '').split('');
+  if (tmp.length < 1) return false;
+
   let lo = 0;
   let hi = tmp.length-1;
 
