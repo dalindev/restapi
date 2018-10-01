@@ -40,6 +40,28 @@ restapi
 ```
 
 
+
+## Signup/Login (use Website or Postman)
+* **URL** 
+    `/signup`
+* **Payload**
+    **Header**
+    `Content-Type: application/x-www-form-urlencoded` 
+    **Body** (raw)
+    `email=444%40333.com&password=111&firstname=dalin4&lastname=huang4`
+
+* **URL** 
+    `/login`
+* **Payload**
+    **Header**
+    `Content-Type: application/x-www-form-urlencoded` 
+    **Body** (raw)
+    `email=111%40111.com&password=111`
+
+
+##once login, copy the `connect.sid` cookie as auth token for testing.
+
+
 ## v1 API documentation
 
 ### NOTE: 
