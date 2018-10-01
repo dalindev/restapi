@@ -38,7 +38,8 @@ if (process.env.NODE_ENV == undefined) {
 }
 
 // log request to console
-app.use(morgan('dev'));
+app.use(morgan('tiny'));
+
 // public folder
 app.use(express.static('public'));
 

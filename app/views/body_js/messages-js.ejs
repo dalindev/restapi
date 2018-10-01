@@ -8,6 +8,9 @@ $(function() {
 
 
   // -------------- Events delegation -------------
+  /**
+   * Events delegation
+   */
   class InputBox {
 
     constructor(elem) {
@@ -46,7 +49,9 @@ $(function() {
 
   // ------------------ Functions -----------------
   /**
-   * display one or mutiple msgs
+   * Display messages from API
+   *
+   * @param {obj} dataObj Request
    */
   function displayMessages(dataObj) {
 
@@ -101,13 +106,14 @@ $(function() {
       }
     ).then(response => response.json());
 
-    if (res && res.meta && res.meta.total > 0) {
+    if (res && res.meta && (res.meta.total > 0 || res.data !== null)) {
       // obj returned instead of array
       res.data = res.data.length === undefined ? [res.data] : res.data;
 
       displayMessages(res.data);
       // reset
       document.querySelector('#getMessageById').value = '';
+      document.querySelector('#delMessageById').value = '';
     } else if (res.meta.total == 0) {
       alert(`Can't find that message...`);
     } else {
@@ -176,6 +182,7 @@ $(function() {
         alert(`OK! ${res.meta.msg}`);
         // reset
         document.querySelector('#delMessageById').value = '';
+        document.querySelector('#getMessageById').value = '';
         // reload msgs
         getMessagesAjax();
       } else {
