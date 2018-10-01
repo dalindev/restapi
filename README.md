@@ -39,7 +39,10 @@ restapi
          └── index.ejs
 ```
 
-
+<br />
+<br />
+<br />
+<br />
 
 ## Setup
 
@@ -53,7 +56,7 @@ restapi
         "_comment": "Never upload this file to Github or any public storage.",
         "dbHost": "localhost",
         "dbUser": "root",
-        "dbPassword": <your db pwd here>,
+        "dbPassword": <your_db pwd here>,
         "dbDatabase": "restapi",
         "session_secret": "93EA130DC0E6DEF5AA47EDA28556EF7C25B01B57F9E876D335FD073318675F86",
         "db": {
@@ -75,7 +78,10 @@ restapi
 ```
 
 
-
+<br />
+<br />
+<br />
+<br />
 
 
 ## Signup/Login (use Website or Postman)
@@ -104,6 +110,12 @@ restapi
 
 ##once login, copy the `connect.sid` cookie as auth token for testing.
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 ## v1 API documentation
 
