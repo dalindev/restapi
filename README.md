@@ -41,6 +41,43 @@ restapi
 
 
 
+## Setup
+
+1. `git clone` this project
+2. `npm install`
+3. make sure you have MySQL database running
+4. Create a config file `conf.json` at here `/restapi/config/conf.json`, put your db pwd, generate a session secret too. (never share your session secret)
+```json
+    {
+      "development": {
+        "_comment": "Never upload this file to Github or any public storage.",
+        "dbHost": "localhost",
+        "dbUser": "root",
+        "dbPassword": <your db pwd here>,
+        "dbDatabase": "restapi",
+        "session_secret": "93EA130DC0E6DEF5AA47EDA28556EF7C25B01B57F9E876D335FD073318675F86",
+        "db": {
+          "username": "root",
+          "password": <your db pwd here>,
+          "database": "restapi",
+          "host": "127.0.0.1",
+          "logging": false,
+          "options": {
+            "operatorsAliases": false,
+            "dialect": "mysql"
+          }
+        }
+      },
+       "production": {
+        "_comment": "Place holder..."
+      }
+    }
+```
+
+
+
+
+
 ## Signup/Login (use Website or Postman)
 
 ### Signup
