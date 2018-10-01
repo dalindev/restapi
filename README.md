@@ -1,4 +1,4 @@
-# REST API app, 
+# REST API application
 
 ### live on AWS:  
 * http://ec2-34-202-163-172.compute-1.amazonaws.com:3000/ 
