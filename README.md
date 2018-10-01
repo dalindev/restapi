@@ -122,7 +122,7 @@ restapi
 ### NOTE: 
   * HTTP Status Code will always be `200 OK`
   * However, the status code and error status can be found here:
-        ```json
+```
         {     
             'meta': {
               'error': true,
@@ -130,7 +130,7 @@ restapi
               'msg': 'Error: Can not get Messages!'
             } 
         }
-        ```
+```
   * **Note here:**
         * `"error": true` for important error.
 
@@ -360,7 +360,7 @@ restapi
     ```json
     {
         "meta": {
-            "error": true, // flag indicate how serious is the error
+            "error": true,
             "code": 400,
             "msg": "Error: bad request, check your payload or URL!"
         }
