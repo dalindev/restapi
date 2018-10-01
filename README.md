@@ -43,8 +43,8 @@ restapi
 
 ## Signup/Login (use Website or Postman)
 
-* **URL** 
-    `/signup`
+### Signup
+    URL: `/signup`
 * **Payload**
 
     **Header** <br />
@@ -54,8 +54,8 @@ restapi
     `email=444%40333.com&password=111&firstname=dalin4&lastname=huang4`
 
 
-* **URL** 
-    `/login`
+### Login 
+    URL: `/login`
 * **Payload**
 
     **Header** <br />
