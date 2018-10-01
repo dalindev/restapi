@@ -42,20 +42,26 @@ restapi
 
 
 ## Signup/Login (use Website or Postman)
+
 * **URL** 
     `/signup`
 * **Payload**
-    **Header**
+
+    **Header** <br />
     `Content-Type: application/x-www-form-urlencoded` 
-    **Body** (raw)
+    
+    **Body** (raw) <br />
     `email=444%40333.com&password=111&firstname=dalin4&lastname=huang4`
+
 
 * **URL** 
     `/login`
 * **Payload**
-    **Header**
+
+    **Header** <br />
     `Content-Type: application/x-www-form-urlencoded` 
-    **Body** (raw)
+    
+    **Body** (raw) <br />
     `email=111%40111.com&password=111`
 
 
