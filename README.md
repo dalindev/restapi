@@ -1,4 +1,9 @@
-# REST API app, live on AWS:  http://34.202.163.172:3000/
+# REST API app, 
+
+### live on AWS:  
+* http://ec2-34-202-163-172.compute-1.amazonaws.com:3000/ 
+* or 
+* http://34.202.163.172:3000/
 
 
 ### Project structure 
